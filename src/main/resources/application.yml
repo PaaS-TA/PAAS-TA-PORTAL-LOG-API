@@ -3,22 +3,23 @@ spring:
       name: PortalApi
   flyway:
       enabled: false
-#  cloud:
-#    config:
-#      uri: http://localhost:8004
 
-
-
-
-# Spring properties
-spring:
-  application:
-    name: PortalLogApi  # Service registers under this name
-  security:
-    username: admin
-    password: openpaasta
-  flyway:
-    enabled: false
+#Spring config setting (current version not used)
+#  boot:
+#    #Spring boot admin settings
+#    admin:
+#      routes:
+#        endpoints: env,metrics,trace,info,trace,heapdump,hystrix.stream,docs
+#        #Timeintervalin ms to update the status of App
+#      monitor:
+#        perio: 10000
+#        #LifeTime of App status in ms.
+#        status-lifetime: 10000
+#        #Connection Timeout in ms when App's status and info
+#        connect-timeout: 2000
+#        #Read Timeout in ms when App's status and info
+#        read-timeout: 5000
+#      metadata-keys-to-sanitize: .password$,.*secret$,.*key$,.$token$,.credentials.,.*vcap_services$
 
 
 # HTTP Server

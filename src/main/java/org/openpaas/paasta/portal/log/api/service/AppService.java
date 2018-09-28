@@ -2,6 +2,8 @@ package org.openpaas.paasta.portal.log.api.service;
 
 
 import com.corundumstudio.socketio.SocketIOClient;
+import org.cloudfoundry.client.v2.applications.ApplicationStatisticsResponse;
+import org.cloudfoundry.client.v2.applicationusageevents.GetApplicationUsageEventResponse;
 import org.cloudfoundry.doppler.LogMessage;
 import org.cloudfoundry.operations.DefaultCloudFoundryOperations;
 import org.cloudfoundry.operations.applications.LogsRequest;
@@ -32,7 +34,6 @@ public class AppService extends Common {
 
     public SocketIOClient socketTailLogs(SocketIOClient client, String appName, String orgName, String spaceName) {
         DefaultCloudFoundryOperations cloudFoundryOperations = cloudFoundryOperations(connectionContext(), tokenProvider(adminUserName,adminPassword), orgName, spaceName);
-
         cloudFoundryOperations.applications()
                 .logs(LogsRequest.builder()
                         .name(appName)

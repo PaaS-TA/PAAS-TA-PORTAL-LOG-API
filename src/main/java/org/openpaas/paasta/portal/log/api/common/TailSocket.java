@@ -16,10 +16,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.Enumeration;
 
 /**
@@ -112,11 +109,16 @@ public class TailSocket implements CommandLineRunner {
                 String appName = referer.substring(referer.indexOf("name=") + 5, referer.indexOf("&org="));
                 String orgName = referer.substring(referer.indexOf("org=") + 4, referer.indexOf("&space="));
                 String spaceName = referer.substring(referer.indexOf("space=") + 6, referer.indexOf("&guid="));
+                try {
+                    appName = URLDecoder.decode(appName, "UTF-8");
+                    orgName = URLDecoder.decode(orgName, "UTF-8");
+                    spaceName = URLDecoder.decode(spaceName, "UTF-8");
+                }catch (Exception e){
 
+                }
                 LOGGER.info(appName);
                 LOGGER.info(spaceName);
                 LOGGER.info(orgName);
-
 
                 appService.socketTailLogs(client, appName, orgName, spaceName);
             }

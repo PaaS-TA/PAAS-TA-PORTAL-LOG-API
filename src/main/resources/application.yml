@@ -1,0 +1,86 @@
+spring:
+  application:
+      name: PortalApi
+  flyway:
+      enabled: false
+
+#Spring config setting (current version not used)
+#  boot:
+#    #Spring boot admin settings
+#    admin:
+#      routes:
+#        endpoints: env,metrics,trace,info,trace,heapdump,hystrix.stream,docs
+#        #Timeintervalin ms to update the status of App
+#      monitor:
+#        perio: 10000
+#        #LifeTime of App status in ms.
+#        status-lifetime: 10000
+#        #Connection Timeout in ms when App's status and info
+#        connect-timeout: 2000
+#        #Read Timeout in ms when App's status and info
+#        read-timeout: 5000
+#      metadata-keys-to-sanitize: .password$,.*secret$,.*key$,.$token$,.credentials.,.*vcap_services$
+
+
+# HTTP Server
+server:
+  port: ${PORT:2230}   # HTTP (Tomcat) port
+
+tailsocket:
+  port: 5555
+
+management:     # If you set off security...
+  security:
+    enabled: false
+
+
+# CloudFoundry API Url
+cloudfoundry:
+  cc:
+    api:
+      url: https://api.XXX.XXX.XXX.XXX.xip.io # YOUR API URL
+      uaaUrl: https://uaa.XXX.XXX.XXX.XXX.xip.io # YOUR UAA API URL
+      sslSkipValidation: true
+  # CloudFoundry Login information
+  user:
+    admin:
+      username: admin # YOUR CF ADMIN ACCOUT
+      password: 'PASSWORD' # YOUR CF ADMIN PASSWORD
+    uaaClient:
+      clientId: login
+      clientSecret: login-secret
+      adminClientId: admin
+      adminClientSecret: admin-secret
+      loginClientId: login
+      loginClientSecret: login-secret
+      skipSSLValidation: true
+  authorization: cf-Authorization
+
+
+---
+spring:
+  profiles: local
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:2221/eureka/ # YOUR LOCAL TEST SETTING
+      registry-fetch-interval-seconds: 5
+  instance:
+    hostname: ${spring.cloud.client.hostname}
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 10
+
+---
+spring:
+  profiles: dev
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://XXX.XXX.XXX.XXX:2221/eureka/ #YOUR EUREKA SERVICE DEV SETTING(ACTIVE INFORMATION)
+      registry-fetch-interval-seconds: 5
+  instance:
+    hostname: ${spring.cloud.client.hostname}
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 10

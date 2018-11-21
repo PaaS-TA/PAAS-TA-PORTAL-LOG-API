@@ -9,7 +9,7 @@ Portal LOG API 란? CF Tail 로그서비스를 위해서 별도의 서비스를 
 
 ## 유의사항
 
-개발 정보 - (v2.0 - FINAL)
+개발 정보 - (V2.0 - BETA)
 - java 1.8 버전
 - SpringCloud Edgware.RELEASE 
 - TomcatEmded 8.5.14

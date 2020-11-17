@@ -1,8 +1,68 @@
+# Spring properties
 spring:
   application:
-      name: PortalApi
+    name: PortalLogApi  # Service registers under this name
+  security:
+    username: admin
+    password: openpaasta
   flyway:
-      enabled: false
+    enabled: false
+
+# HTTP Server
+server:
+  port: ${PORT:2230}   # HTTP (Tomcat) port
+
+tailsocket:
+  port: 5555
+
+management:     # If you set off security...
+  security:
+    enabled: false
+
+# CloudFoundry API Url
+cloudfoundry:
+  cc:
+    api:
+      url: https://api.<DOMAIN>
+      uaaUrl: https://uaa.<DOMAIN>
+      sslSkipValidation: true
+  # CloudFoundry Login information
+  user:
+    admin:
+      username: <CF_USER_ADMIN_USERNAME>            # (e.g. admin)
+      password: <CF_USER_ADMIN_PASSWORD>            # (e.g. admin)
+    uaaClient:
+      clientId: <UAA_CLIENT_ID>                     # (e.g. login)
+      clientSecret: <UAA_CLIENT_SECRET>             # (e.g. login-secret)
+      adminClientId: <UAA_ADMIN_CLIENT_ID>          # (e.g. admin)
+      adminClientSecret: <UAA_ADMIN_CLIENT_SECRET>  # (e.g. admin-secret)
+      loginClientId: <UAA_LOGIN_CLIENT_ID>          # (e.g. login)
+      loginClientSecret: <UAA_LOGIN_CLIENT_SECRET>  # (e.g. login-secret)
+      skipSSLValidation: true
+  authorization: cf-Authorization
+
+# Discovery Server Access
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://<PORTAL_REGISTRATION_IP>:<PORTAL_REGISTRATION_PORT>/eureka/
+      registry-fetch-interval-seconds: 5
+  instance:
+    hostname: ${spring.cloud.client.hostname}
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 10
+
+paasta:
+  portal:
+    api:
+      authorization:
+        base64: Basic YWRtaW46b3BlbnBhYXN0YQ==
+      zuulUrl:
+        cfapi: http://<PORTAL_GATEWAY_IP>:<PORTAL_GATEWAY_PORT>/portalapi
+        commonapi: http://<PORTAL_GATEWAY_IP>:<PORTAL_GATEWAY_PORT>/commonapi
+        storageapi: http://<PORTAL_GATEWAY_IP>:<PORTAL_GATEWAY_PORT>/storageapi
+    storageapi:
+      type: swift
 
 #Spring config setting (current version not used)
 #  boot:
@@ -20,67 +80,3 @@ spring:
 #        #Read Timeout in ms when App's status and info
 #        read-timeout: 5000
 #      metadata-keys-to-sanitize: .password$,.*secret$,.*key$,.$token$,.credentials.,.*vcap_services$
-
-
-# HTTP Server
-server:
-  port: ${PORT:2230}   # HTTP (Tomcat) port
-
-tailsocket:
-  port: 5555
-
-management:     # If you set off security...
-  security:
-    enabled: false
-
-
-# CloudFoundry API Url
-cloudfoundry:
-  cc:
-    api:
-      url: https://api.XXX.XXX.XXX.XXX.xip.io # YOUR API URL
-      uaaUrl: https://uaa.XXX.XXX.XXX.XXX.xip.io # YOUR UAA API URL
-      sslSkipValidation: true
-  # CloudFoundry Login information
-  user:
-    admin:
-      username: admin # YOUR CF ADMIN ACCOUT
-      password: 'PASSWORD' # YOUR CF ADMIN PASSWORD
-    uaaClient:
-      clientId: login
-      clientSecret: login-secret
-      adminClientId: admin
-      adminClientSecret: admin-secret
-      loginClientId: login
-      loginClientSecret: login-secret
-      skipSSLValidation: true
-  authorization: cf-Authorization
-
-
----
-spring:
-  profiles: local
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://127.0.0.1:2221/eureka/ # YOUR LOCAL TEST SETTING
-      registry-fetch-interval-seconds: 5
-  instance:
-    hostname: ${spring.cloud.client.hostname}
-    lease-expiration-duration-in-seconds: 5
-    lease-renewal-interval-in-seconds: 10
-
----
-spring:
-  profiles: dev
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://XXX.XXX.XXX.XXX:2221/eureka/ #YOUR EUREKA SERVICE DEV SETTING(ACTIVE INFORMATION)
-      registry-fetch-interval-seconds: 5
-  instance:
-    hostname: ${spring.cloud.client.hostname}
-    lease-expiration-duration-in-seconds: 5
-    lease-renewal-interval-in-seconds: 10

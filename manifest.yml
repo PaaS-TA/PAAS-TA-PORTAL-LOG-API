@@ -1,0 +1,41 @@
+applications:
+- name: portal-log-api
+  memory: 1G
+  instances: 1
+  buildpacks:
+  - java_buildpack
+  path: build/libs/paas-ta-portal-log-api.jar
+  env:
+    server_port: 80
+
+    spring_application_name: PortalLogApi
+
+    spring_security_username: admin
+    spring_security_password: openpaasta
+
+    tailsocket_port: 5555
+
+    ### paasta info
+    cloudfoundry_cc_api_url: https://api.<DOMAIN>
+    cloudfoundry_cc_api_uaaUrl: https://uaa.<DOMAIN>
+    cloudfoundry_cc_api_sslSkipValidation: true
+    cloudfoundry_user_admin_username: <CF_USER_ADMIN_USERNAME>                # (e.g. admin)
+    cloudfoundry_user_admin_password: <CF_USER_ADMIN_PASSWORD>                # (e.g. admin)
+    cloudfoundry_user_uaaClient_clientId: <UAA_CLIENT_ID>                     # (e.g. login)
+    cloudfoundry_user_uaaClient_clientSecret: <UAA_CLIENT_SECRET>             # (e.g. login-secret)
+    cloudfoundry_user_uaaClient_adminClientId: <UAA_ADMIN_CLIENT_ID>          # (e.g. admin)
+    cloudfoundry_user_uaaClient_adminClientSecret: <UAA_ADMIN_CLIENT_SECRET>  # (e.g. admin-secret)
+    cloudfoundry_user_uaaClient_loginClientId: <UAA_LOGIN_CLIENT_ID>          # (e.g. login)
+    cloudfoundry_user_uaaClient_loginClientSecret: <UAA_LOGIN_CLIENT_SECRET>  # (e.g. login-secret)
+    cloudfoundry_user_uaaClient_skipSSLValidation: true
+    cloudfoundry_authorization: cf-Authorization
+
+    eureka_client_serviceUrl_defaultZone: http://portal-registration.<DOMAIN>/eureka/
+    eureka_instance_hostname: ${vcap.application.uris[0]}
+    eureka_instance_nonSecurePort: 80
+    
+    paasta_portal_api_authorization_base64: Basic YWRtaW46b3BlbnBhYXN0YQ==
+    paasta_portal_api_zuulUrl_cfapi: http://portal-gateway.<DOMAIN>/portalapi
+    paasta_portal_api_zuulUrl_commonapi: http://portal-gateway.<DOMAIN>/commonapi
+    paasta_portal_api_zuulUrl_storageapi: http://portal-gateway.<DOMAIN>/storageapi
+    paasta_portal_storageapi_type: swift

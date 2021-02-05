@@ -54,6 +54,7 @@ public class TailSocket implements CommandLineRunner {
             for (String str : env.getActiveProfiles()) {
                 active = str;
             }
+            LOGGER.info("active=" + active);
 
             if (active.equals("local")) {
                 hostName = "localhost";
@@ -84,7 +85,7 @@ public class TailSocket implements CommandLineRunner {
 
 
             } else {
-                hostName = "localhost";
+                hostName = "0.0.0.0";
             }
 
         } catch (UnknownHostException e) {
@@ -105,10 +106,10 @@ public class TailSocket implements CommandLineRunner {
 
                 LOGGER.info("onConnected");
                 String referer = client.getHandshakeData().getHttpHeaders().get("Referer");
-                LOGGER.info(referer);
-                String appName = referer.substring(referer.indexOf("name=") + 5, referer.indexOf("&org="));
-                String orgName = referer.substring(referer.indexOf("org=") + 4, referer.indexOf("&space="));
-                String spaceName = referer.substring(referer.indexOf("space=") + 6, referer.indexOf("&guid="));
+                String appName = client.getHandshakeData().getSingleUrlParam("name");
+                String orgName = client.getHandshakeData().getSingleUrlParam("org");
+                String spaceName = client.getHandshakeData().getSingleUrlParam("space");
+
                 try {
                     appName = URLDecoder.decode(appName, "UTF-8");
                     orgName = URLDecoder.decode(orgName, "UTF-8");

@@ -105,7 +105,7 @@ public class TailSocket implements CommandLineRunner {
             public void onConnect(SocketIOClient client) {
 
                 LOGGER.info("onConnected");
-                String referer = client.getHandshakeData().getHttpHeaders().get("Referer");
+                //String referer = client.getHandshakeData().getHttpHeaders().get("Referer");
                 String appName = client.getHandshakeData().getSingleUrlParam("name");
                 String orgName = client.getHandshakeData().getSingleUrlParam("org");
                 String spaceName = client.getHandshakeData().getSingleUrlParam("space");
@@ -140,12 +140,12 @@ public class TailSocket implements CommandLineRunner {
             }
         });
         LOGGER.info("Starting server...");
-        ServerInfo(server);
+        serverInfo(server);
         server.start();
         LOGGER.info("Server started...");
     }
 
-    public void ServerInfo(SocketIOServer server){
+    public void serverInfo(SocketIOServer server){
         LOGGER.info("HostName :::: " +server.getConfiguration().getHostname());
         LOGGER.info("Context :::: " +server.getConfiguration().getContext());
         LOGGER.info("Port :::: " + server.getConfiguration().getPort());

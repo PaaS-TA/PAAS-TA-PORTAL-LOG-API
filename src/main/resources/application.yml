@@ -8,6 +8,15 @@ spring:
   flyway:
     enabled: false
 
+influxdb:
+  url: http://<INFLUXDB_IP>:<INFLUXDB_PORT>
+  username: <INFLUXDB_USERNAME>
+  password: <INFLUXDB_PASSWORD>
+  database: <INFLUXDB_DATABASE>
+  measurement: <INFLUXDB_MEASUREMENT>
+  retention-policy: autogen
+  limit: <INFLUXDB_QUERY_LIMIT>
+
 # HTTP Server
 server:
   port: ${PORT:2230}   # HTTP (Tomcat) port

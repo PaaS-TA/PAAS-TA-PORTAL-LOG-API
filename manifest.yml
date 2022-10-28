@@ -39,3 +39,10 @@ applications:
     paasta_portal_api_zuulUrl_commonapi: http://portal-gateway.<DOMAIN>/commonapi
     paasta_portal_api_zuulUrl_storageapi: http://portal-gateway.<DOMAIN>/storageapi
     paasta_portal_storageapi_type: swift
+
+    influxdb_url: http://<INFLUXDB_IP>:<INFLUXDB_PORT>
+    influxdb_username: <INFLUXDB_USERNAME>
+    influxdb_password: <INFLUXDB_PASSWORD>
+    influxdb_database: <INFLUXDB_DATABASE>
+    influxdb_measurement: <INFLUXDB_MEASUREMENT>
+    influxdb_limit: <INFLUXDB_QUERY_LIMIT>

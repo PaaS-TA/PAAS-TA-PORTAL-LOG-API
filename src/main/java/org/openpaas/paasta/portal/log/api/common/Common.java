@@ -36,6 +36,8 @@ public class Common {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Common.class);
 
+    public static final String NONE_VALUE = "NONE";
+
     @Value("${cloudfoundry.cc.api.url}")
     public String apiTarget;
 
@@ -196,7 +198,7 @@ public class Common {
      * @throws Exception the exception
      */
     private static String getProcPropertyValue(String key, String configFileName) throws Exception {
-        if (Constants.NONE_VALUE.equals(configFileName)) return "";
+        if (NONE_VALUE.equals(configFileName)) return "";
 
         Properties prop = new Properties();
 
@@ -218,7 +220,7 @@ public class Common {
      * @throws Exception the exception
      */
     public static String getPropertyValue(String key, String configFileName) throws Exception {
-        return getProcPropertyValue(key, Optional.ofNullable(configFileName).orElse(Constants.NONE_VALUE));
+        return getProcPropertyValue(key, Optional.ofNullable(configFileName).orElse(NONE_VALUE));
     }
 
 

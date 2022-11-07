@@ -8,15 +8,6 @@ spring:
   flyway:
     enabled: false
 
-influxdb:
-  url: http://<INFLUXDB_IP>:<INFLUXDB_PORT>
-  username: <INFLUXDB_USERNAME>
-  password: <INFLUXDB_PASSWORD>
-  database: <INFLUXDB_DATABASE>
-  measurement: <INFLUXDB_MEASUREMENT>
-  retention-policy: autogen
-  limit: <INFLUXDB_QUERY_LIMIT>
-
 # HTTP Server
 server:
   port: ${PORT:2230}   # HTTP (Tomcat) port
@@ -45,10 +36,7 @@ cloudfoundry:
       clientSecret: <UAA_CLIENT_SECRET>             # (e.g. login-secret)
       adminClientId: <UAA_ADMIN_CLIENT_ID>          # (e.g. admin)
       adminClientSecret: <UAA_ADMIN_CLIENT_SECRET>  # (e.g. admin-secret)
-      loginClientId: <UAA_LOGIN_CLIENT_ID>          # (e.g. login)
-      loginClientSecret: <UAA_LOGIN_CLIENT_SECRET>  # (e.g. login-secret)
       skipSSLValidation: true
-  authorization: cf-Authorization
 
 # Discovery Server Access
 eureka:
@@ -61,17 +49,16 @@ eureka:
     lease-expiration-duration-in-seconds: 5
     lease-renewal-interval-in-seconds: 10
 
-paasta:
-  portal:
-    api:
-      authorization:
-        base64: Basic YWRtaW46b3BlbnBhYXN0YQ==
-      zuulUrl:
-        cfapi: http://<PORTAL_GATEWAY_IP>:<PORTAL_GATEWAY_PORT>/portalapi
-        commonapi: http://<PORTAL_GATEWAY_IP>:<PORTAL_GATEWAY_PORT>/commonapi
-        storageapi: http://<PORTAL_GATEWAY_IP>:<PORTAL_GATEWAY_PORT>/storageapi
-    storageapi:
-      type: swift
+# InfluxDB Access Info
+influxdb:
+  url: http://<INFLUXDB_IP>:<INFLUXDB_PORT>
+  username: <INFLUXDB_USERNAME>
+  password: <INFLUXDB_PASSWORD>
+  database: <INFLUXDB_DATABASE>
+  measurement: <INFLUXDB_MEASUREMENT>
+  retention-policy: autogen
+  limit: <INFLUXDB_QUERY_LIMIT>
+
 
 #Spring config setting (current version not used)
 #  boot:

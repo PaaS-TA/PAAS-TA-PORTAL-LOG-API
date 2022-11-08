@@ -51,13 +51,13 @@ eureka:
 
 # InfluxDB Access Info
 influxdb:
-  url: http://<INFLUXDB_IP>:<INFLUXDB_PORT>
-  username: <INFLUXDB_USERNAME>
-  password: <INFLUXDB_PASSWORD>
-  database: <INFLUXDB_DATABASE>
-  measurement: <INFLUXDB_MEASUREMENT>
+  url: http://10.0.1.115:8086
+  username: admin
+  password: PaaS-TA2022
+  database: logging_db
+  measurement: logging_measurement
   retention-policy: autogen
-  limit: <INFLUXDB_QUERY_LIMIT>
+  limit: 50
 
 
 #Spring config setting (current version not used)

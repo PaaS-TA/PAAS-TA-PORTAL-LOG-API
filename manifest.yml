@@ -31,10 +31,3 @@ applications:
     eureka_client_serviceUrl_defaultZone: http://portal-registration.<DOMAIN>/eureka/
     eureka_instance_hostname: ${vcap.application.uris[0]}
     eureka_instance_nonSecurePort: 80
-
-    influxdb_url: http://<INFLUXDB_IP>:<INFLUXDB_PORT>
-    influxdb_username: <INFLUXDB_USERNAME>
-    influxdb_password: <INFLUXDB_PASSWORD>
-    influxdb_database: <INFLUXDB_DATABASE>
-    influxdb_measurement: <INFLUXDB_MEASUREMENT>
-    influxdb_limit: <INFLUXDB_QUERY_LIMIT>

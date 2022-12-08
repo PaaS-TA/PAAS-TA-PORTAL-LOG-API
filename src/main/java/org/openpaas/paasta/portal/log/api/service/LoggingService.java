@@ -36,11 +36,16 @@ public class LoggingService {
 
         sql += " ORDER BY time DESC LIMIT " + limit;
 
-        QueryResult queryResult = influxDB.query(new Query(sql, dbName));
-        List<QueryResult.Series> resultList = queryResult.getResults().get(0).getSeries();
         List<Object> logList = new ArrayList<>();
-        if(resultList != null) {
-            logList.addAll(resultList.get(0).getValues());
+
+        try {
+            QueryResult queryResult = influxDB.query(new Query(sql, dbName));
+            List<QueryResult.Series> resultList = queryResult.getResults().get(0).getSeries();
+            if(resultList != null) {
+                logList.addAll(resultList.get(0).getValues());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return logList;

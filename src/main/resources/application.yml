@@ -51,6 +51,7 @@ eureka:
 
 # InfluxDB Access Info
 influxdb:
+  ip: 10.0.1.115
   url: http://10.0.1.115:8086
   username: admin
   password: PaaS-TA2022
@@ -58,6 +59,7 @@ influxdb:
   measurement: logging_measurement
   retention-policy: autogen
   limit: 50
+  httpsEnabled: false
 
 
 #Spring config setting (current version not used)

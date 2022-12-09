@@ -5,13 +5,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "influxdb")
 public class InfluxDBProperties {
 
+    private String ip;
     private String url;
     private String username;
     private String password;
     private String database;
     private String measurement;
     private String limit;
+    private boolean httpsEnabled;
 
+
+    public String getIp() {
+        return ip;
+    }
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     public String getUrl() {
         return url;
@@ -53,5 +62,12 @@ public class InfluxDBProperties {
     }
     public void setLimit(String limit) {
         this.limit = limit;
+    }
+
+    public boolean getHttpsEnabled() {
+        return httpsEnabled;
+    }
+    public void setHttpsEnabled(boolean httpsEnabled) {
+        this.httpsEnabled = httpsEnabled;
     }
 }

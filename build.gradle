@@ -36,6 +36,9 @@ dependencyManagement {
     }
 }
 dependencies {
+    //Eureka
+    compile ('org.springframework.cloud:spring-cloud-starter-eureka')
+
     //Server Security
     compile ('org.springframework.boot:spring-boot-starter-security')
 
@@ -51,6 +54,9 @@ dependencies {
 
 
     compile ('org.flywaydb:flyway-core:4.0.3')
+
+    //DB
+    compile ('org.influxdb:influxdb-java:2.14')
 
 
     testCompile('org.springframework.boot:spring-boot-starter-test')

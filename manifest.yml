@@ -6,8 +6,11 @@ applications:
   - java_buildpack
   path: build/libs/paas-ta-portal-log-api.jar
   env:
-    server_port: 80
+    server_port: 8080
 
+    BP_JVM_VERSION: 8
+    BP_SPRING_CLOUD_BINDINGS_DISABLED: true
+    
     spring_application_name: PortalLogApi
 
     spring_security_username: admin
@@ -16,8 +19,8 @@ applications:
     tailsocket_port: 5555
 
     ### paasta info
-    cloudfoundry_cc_api_url: https://api.<DOMAIN>
-    cloudfoundry_cc_api_uaaUrl: https://uaa.<DOMAIN>
+    cloudfoundry_cc_api_url: https://api.<SYSTEM_DOMAIN>
+    cloudfoundry_cc_api_uaaUrl: https://uaa.<SYSTEM_DOMAIN>
     cloudfoundry_cc_api_sslSkipValidation: true
     cloudfoundry_user_admin_username: <CF_USER_ADMIN_USERNAME>                # (e.g. admin)
     cloudfoundry_user_admin_password: <CF_USER_ADMIN_PASSWORD>                # (e.g. admin)
@@ -28,6 +31,6 @@ applications:
     cloudfoundry_user_uaaClient_skipSSLValidation: true
     cloudfoundry_authorization: cf-Authorization
 
-    eureka_client_serviceUrl_defaultZone: http://portal-registration.<DOMAIN>/eureka/
+    eureka_client_serviceUrl_defaultZone: http://portal-registration.<APP_DOMAIN>/eureka/
     eureka_instance_hostname: ${vcap.application.uris[0]}
     eureka_instance_nonSecurePort: 80

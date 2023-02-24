@@ -20,9 +20,6 @@ public class InfluxDBConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InfluxDBConfiguration.class);
 
-    private static final String INFLUXDB_SSL_KEY_PATH = "/var/vcap/jobs/paas-ta-portal-log-api/data/";
-    private static final String INFLUXDB_SSL_PASSWORD = "paasta2022";
-
     private final InfluxDBProperties properties;
 
     public InfluxDBConfiguration(InfluxDBProperties properties) {
@@ -32,19 +29,25 @@ public class InfluxDBConfiguration {
     @Bean
     public InfluxDB influxDB() throws Exception {
         InfluxDB influxDB = null;
+        String url = properties.getUrl();
+        String username = properties.getUsername();
+        String password = properties.getPassword();
 
         if(properties.getHttpsEnabled()) {
+            String sslKeyPath = properties.getSslKeyPath();
+            String sslPassword = properties.getSslPassword();
+
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            keyStore.load(new FileInputStream(INFLUXDB_SSL_KEY_PATH + "keystore.p12"), INFLUXDB_SSL_PASSWORD.toCharArray());
-            keyStore.load(new FileInputStream(INFLUXDB_SSL_KEY_PATH + "keystore.p12"), INFLUXDB_SSL_PASSWORD.toCharArray());
+            keyStore.load(new FileInputStream(sslKeyPath + "/keystore.p12"), sslPassword.toCharArray());
+            keyStore.load(new FileInputStream(sslKeyPath + "/keystore.p12"), sslPassword.toCharArray());
 
             KeyStore trustStore = KeyStore.getInstance("JKS");
-            trustStore.load(new FileInputStream(INFLUXDB_SSL_KEY_PATH + "truststore.jks"), INFLUXDB_SSL_PASSWORD.toCharArray());
+            trustStore.load(new FileInputStream(sslKeyPath + "/truststore.jks"), sslPassword.toCharArray());
 
             SSLContext sslContext = SSLContext.getInstance("SSL");
 
             KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            keyManagerFactory.init(keyStore, INFLUXDB_SSL_PASSWORD.toCharArray());
+            keyManagerFactory.init(keyStore, sslPassword.toCharArray());
 
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             trustManagerFactory.init(trustStore);
@@ -64,18 +67,9 @@ public class InfluxDBConfiguration {
                 }
             });
 
-            influxDB = InfluxDBFactory.connect(
-                    properties.getUrl(),
-                    properties.getUsername(),
-                    properties.getPassword(),
-                    okHttpClientBuilder
-            );
+            influxDB = InfluxDBFactory.connect(url, username, password, okHttpClientBuilder);
         } else {
-            influxDB = InfluxDBFactory.connect(
-                    properties.getUrl(),
-                    properties.getUsername(),
-                    properties.getPassword()
-            );
+            influxDB = InfluxDBFactory.connect(url, username, password);
         }
 
         influxDB.setDatabase(properties.getDatabase());

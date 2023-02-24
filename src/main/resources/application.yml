@@ -60,7 +60,8 @@ influxdb:
   retention-policy: autogen
   limit: 50
   httpsEnabled: false
-
+  sslKeyPath: <INFLUXDB_SSL_KEY_PATH>
+  sslPassword: <INFLUXDB_SSL_PASSWORD>
 
 #Spring config setting (current version not used)
 #  boot:

@@ -13,8 +13,6 @@ public class InfluxDBProperties {
     private String measurement;
     private String limit;
     private boolean httpsEnabled;
-    private String sslKeyPath;
-    private String sslPassword;
 
 
     public String getIp() {
@@ -71,19 +69,5 @@ public class InfluxDBProperties {
     }
     public void setHttpsEnabled(boolean httpsEnabled) {
         this.httpsEnabled = httpsEnabled;
-    }
-
-    public String getSslKeyPath() {
-        return sslKeyPath;
-    }
-    public void setSslKeyPath(String sslKeyPath) {
-        this.sslKeyPath = sslKeyPath;
-    }
-
-    public String getSslPassword() {
-        return sslPassword;
-    }
-    public void setSslPassword(String sslPassword) {
-        this.sslPassword = sslPassword;
     }
 }

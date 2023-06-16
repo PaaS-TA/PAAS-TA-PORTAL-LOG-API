@@ -45,7 +45,7 @@ public class LoggingService {
                 logList.addAll(resultList.get(0).getValues());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
 
         return logList;

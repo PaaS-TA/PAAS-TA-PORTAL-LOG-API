@@ -34,3 +34,13 @@ applications:
     eureka_client_serviceUrl_defaultZone: http://portal-registration.<APP_DOMAIN>/eureka/
     eureka_instance_hostname: ${vcap.application.uris[0]}
     eureka_instance_nonSecurePort: 80
+
+    ### logging info (InfluxDB)
+    influxdb_ip: <LOGGING_INFLUXDB_IP>
+    influxdb_url: https://<LOGGING_INFLUXDB_IP>:<LOGGING_INFLUXDB_PORT>
+    influxdb_username: <LOGGING_INFLUXDB_USERNAME>
+    influxdb_password: <LOGGING_INFLUXDB_PASSWORD>
+    influxdb_database: <LOGGING_INFLUXDB_DATABASE>
+    influxdb_measurement: <LOGGING_INFLUXDB_MEASUREMENT>
+    influxdb_limit: <LOGGING_INFLUXDB_LIMIT>
+    influxdb_httpsEnabled: <LOGGING_INFLUXDB_HTTPS_ENABLED>

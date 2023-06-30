@@ -23,12 +23,12 @@ public class LoggingService {
     @Autowired
     private InfluxDBProperties influxDBProperties;
 
-    public List<Object> getLogData(String appName, String orgName, String sTime, String eTime, String keyword) {
+    public List<Object> getLogData(String guid, String sTime, String eTime, String keyword) {
         String measurement = influxDBProperties.getMeasurement();
         String limit = influxDBProperties.getLimit();
         String dbName = influxDBProperties.getDatabase();
 
-        String sql = "SELECT time, message FROM " + measurement + " WHERE time >= '" + sTime + "' AND time <= '" + eTime + "' AND message =~ /\"cf_org_name\":\"" + orgName + "\"/ AND message =~ /\"cf_app_name\":\"" + appName + "\"/";
+        String sql = "SELECT time, message FROM " + measurement + " WHERE time >= '" + sTime + "' AND time <= '" + eTime + "' AND message =~ /\"cf_app_id\":\"" + guid + "\"/";
 
         if(keyword != null && !keyword.isEmpty() && keyword != "") {
             sql += " AND message =~ /" + keyword + "*/";
@@ -45,7 +45,7 @@ public class LoggingService {
                 logList.addAll(resultList.get(0).getValues());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
 
         return logList;

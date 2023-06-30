@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,17 +24,16 @@ public class LoggingController {
      *
      * @return Map(자바클래스)
      */
-    @GetMapping("/log")
+    @GetMapping("/logs/app/{guid}")
     public List<Object> getLogData(
-            @RequestParam(name = "name") String appName,
-            @RequestParam(name = "org") String orgName,
+            @PathVariable String guid,
             @RequestParam(name = "stime", required = false) String startTime,
             @RequestParam(name = "etime", required = false) String endTime,
             @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword) {
 
-        LOGGER.debug("getLogData() :: name = " + appName + ", org = " + orgName + ", startTime = " + startTime + ", endTime = " + endTime + ", keyword = " + keyword);
+        LOGGER.debug("getLogData() :: appGuid = " + guid + ", startTime = " + startTime + ", endTime = " + endTime + ", keyword = " + keyword);
 
-        return loggingService.getLogData(appName, orgName, startTime, endTime, keyword);
+        return loggingService.getLogData(guid, startTime, endTime, keyword);
     }
 
 }

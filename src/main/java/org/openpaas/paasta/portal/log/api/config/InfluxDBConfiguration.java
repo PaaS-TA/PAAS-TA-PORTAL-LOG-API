@@ -8,20 +8,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
-import javax.net.ssl.*;
-import java.io.FileInputStream;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import java.io.InputStream;
 import java.security.KeyStore;
-import java.security.SecureRandom;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 
 @Configuration
 @EnableConfigurationProperties(InfluxDBProperties.class)
 public class InfluxDBConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InfluxDBConfiguration.class);
-
-    private static final String INFLUXDB_SSL_KEY_PATH = "/var/vcap/jobs/paas-ta-portal-log-api/data/";
-    private static final String INFLUXDB_SSL_PASSWORD = "paasta2022";
 
     private final InfluxDBProperties properties;
 
@@ -32,50 +34,41 @@ public class InfluxDBConfiguration {
     @Bean
     public InfluxDB influxDB() throws Exception {
         InfluxDB influxDB = null;
+        String url = properties.getUrl();
+        String username = properties.getUsername();
+        String password = properties.getPassword();
 
-        if(properties.getHttpsEnabled()) {
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            keyStore.load(new FileInputStream(INFLUXDB_SSL_KEY_PATH + "keystore.p12"), INFLUXDB_SSL_PASSWORD.toCharArray());
-            keyStore.load(new FileInputStream(INFLUXDB_SSL_KEY_PATH + "keystore.p12"), INFLUXDB_SSL_PASSWORD.toCharArray());
 
-            KeyStore trustStore = KeyStore.getInstance("JKS");
-            trustStore.load(new FileInputStream(INFLUXDB_SSL_KEY_PATH + "truststore.jks"), INFLUXDB_SSL_PASSWORD.toCharArray());
+        try {
+            if(properties.getHttpsEnabled()) {
+                ClassPathResource certificateResource = new ClassPathResource("certs/influx_cert.crt");
+                InputStream certificateInputStream = certificateResource.getInputStream();
 
-            SSLContext sslContext = SSLContext.getInstance("SSL");
+                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                keyStore.load(null);
 
-            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            keyManagerFactory.init(keyStore, INFLUXDB_SSL_PASSWORD.toCharArray());
+                CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+                Certificate certificate = certificateFactory.generateCertificate(certificateInputStream);
+                keyStore.setCertificateEntry("influxdb", certificate);
+                trustManagerFactory.init(keyStore);
 
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init(trustStore);
+                TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
 
-            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(null, trustManagers, null);
 
-            sslContext.init(keyManagerFactory.getKeyManagers(), trustManagers, new SecureRandom());
-            sslContext.getDefaultSSLParameters().setNeedClientAuth(true);
+                OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+                okHttpClientBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0]);
+                okHttpClientBuilder.hostnameVerifier((hostname, session) -> hostname.equalsIgnoreCase(properties.getIp()));
 
-            OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
-            okHttpClientBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0]);
-            okHttpClientBuilder.hostnameVerifier((hostname, session) -> {
-                if(hostname.equalsIgnoreCase(properties.getIp())) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
-            influxDB = InfluxDBFactory.connect(
-                    properties.getUrl(),
-                    properties.getUsername(),
-                    properties.getPassword(),
-                    okHttpClientBuilder
-            );
-        } else {
-            influxDB = InfluxDBFactory.connect(
-                    properties.getUrl(),
-                    properties.getUsername(),
-                    properties.getPassword()
-            );
+                influxDB = InfluxDBFactory.connect(url, username, password, okHttpClientBuilder);
+            }
+            else {
+                    influxDB = InfluxDBFactory.connect(url, username, password);
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
         }
 
         influxDB.setDatabase(properties.getDatabase());

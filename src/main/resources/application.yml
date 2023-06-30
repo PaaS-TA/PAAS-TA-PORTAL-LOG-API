@@ -61,7 +61,6 @@ influxdb:
   limit: 50
   httpsEnabled: false
 
-
 #Spring config setting (current version not used)
 #  boot:
 #    #Spring boot admin settings
